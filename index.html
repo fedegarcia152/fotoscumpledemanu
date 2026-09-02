@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álbum de Recuerdos - 1er Añito de Manu</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-yellow: #FFD166;
+            --primary-coral: #EF476F;
+            --primary-teal: #06D6A0;
+            --primary-blue: #118AB2;
+            --primary-purple: #8338EC;
+            --bg-light: #FFFDF9;
+            --text-dark: #2B2D42;
+            --text-muted: #6C757D;
+            --card-bg: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            background-color: #eef2f7;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            padding: 20px 10px;
+        }
+
+        /* FONDO DE GLOBOS */
+        .background-balloons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-balloon {
+            position: absolute;
+            bottom: -120px;
+            opacity: 0.35;
+            animation: floatUp 14s linear infinite;
+        }
+
+        .bg-balloon:nth-child(1) { left: 5%; width: 50px; animation-duration: 12s; animation-delay: 0s; }
+        .bg-balloon:nth-child(2) { left: 15%; width: 65px; animation-duration: 16s; animation-delay: 3s; }
+        .bg-balloon:nth-child(3) { left: 80%; width: 55px; animation-duration: 14s; animation-delay: 1s; }
+        .bg-balloon:nth-child(4) { left: 90%; width: 70px; animation-duration: 18s; animation-delay: 5s; }
+        .bg-balloon:nth-child(5) { left: 2%; width: 45px; animation-duration: 15s; animation-delay: 7s; }
+        .bg-balloon:nth-child(6) { left: 88%; width: 60px; animation-duration: 13s; animation-delay: 9s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-60vh) rotate(12deg); }
+            100% { transform: translateY(-120vh) rotate(-12deg); }
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .main-wrapper {
+            width: 100%;
+            max-width: 950px;
+            background-color: var(--bg-light);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            padding: 30px 20px 40px 20px;
+            z-index: 1;
+        }
+
+        /* ENCABEZADO */
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header-section h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.3rem;
+            color: var(--primary-coral);
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 0px #FFD166;
+        }
+
+        .header-section p {
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.4;
+        }
+
+        @media (min-width: 768px) {
+            body { padding: 40px 20px; }
+            .header-section h1 { font-size: 3rem; }
+            .header-section p { font-size: 1.25rem; }
+        }
+
+        /* GALERÍA DE FOTOS */
+        .album-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 600px) {
+            .album-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+        }
+
+        .photo-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+        }
+
+        .photo-wrapper {
+            width: 100%;
+            height: 260px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .photo-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .photo-card:hover .photo-wrapper img {
+            transform: scale(1.04);
+        }
+
+        /* BOTÓN DE DESCARGA EN TARJETA */
+        .card-actions {
+            padding: 10px;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-download-card {
+            background-color: var(--primary-teal);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.15s;
+            box-shadow: 0 3px 8px rgba(6, 214, 160, 0.3);
+        }
+
+        .btn-download-card:hover {
+            background-color: #05b88a;
+            transform: scale(1.03);
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 35px;
+            font-weight: 600;
+        }
+
+        /* LIGHTBOX / VISOR AMPLIADO */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.92);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        .lightbox-content-container {
+            position: relative;
+            max-width: 90%;
+            max-height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-content {
+            max-width: 100%;
+            max-height: 75vh;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: white;
+            font-size: 38px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            z-index: 10001;
+            transition: color 0.2s;
+        }
+
+        .lightbox-close:hover {
+            color: var(--primary-yellow);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-50%) scale(1.08);
+        }
+
+        .lightbox-prev { left: 15px; }
+        .lightbox-next { right: 15px; }
+
+        .lightbox-download-bar {
+            margin-top: 15px;
+            z-index: 10000;
+        }
+
+        .btn-download-lightbox {
+            background-color: var(--primary-coral);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            box-shadow: 0 4px 14px rgba(239, 71, 111, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn-download-lightbox:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Globos en el fondo de la pantalla -->
+    <div class="background-balloons">
+        <svg class="bg-balloon" viewBox="0 0 50 70"><path d="M25 0 C38 0 50 12 50 28 C50 48 27 58 25 60 C23 58 0 48 0 28 C0 12 12 0 25 0 Z" fill="#EF476F"/><polygon points="23,59 27,59 25,64" fill="#EF476F"/><path d="M25 64 Q22 67 25 70" stroke="#aaa" stroke-width="1.5" fill="none"/></svg>
+        <svg class="bg-balloon" viewBox="0 0 50 70"><path d="M25 0 C38 0 50 12 50 28 C50 48 27 58 25 60 C23 58 0 48 0 28 C0 12 12 0 25 0 Z" fill="#118AB2"/><polygon points="23,59 27,59 25,64" fill="#118AB2"/><path d="M25 64 Q28 67 25 70" stroke="#aaa" stroke-width="1.5" fill="none"/></svg>
+        <svg class="bg-balloon" viewBox="0 0 50 70"><path d="M25 0 C38 0 50 12 50 28 C50 48 27 58 25 60 C23 58 0 48 0 28 C0 12 12 0 25 0 Z" fill="#FFD166"/><polygon points="23,59 27,59 25,64" fill="#FFD166"/><path d="M25 64 Q22 67 25 70" stroke="#aaa" stroke-width="1.5" fill="none"/></svg>
+        <svg class="bg-balloon" viewBox="0 0 50 70"><path d="M25 0 C38 0 50 12 50 28 C50 48 27 58 25 60 C23 58 0 48 0 28 C0 12 12 0 25 0 Z" fill="#06D6A0"/><polygon points="23,59 27,59 25,64" fill="#06D6A0"/><path d="M25 64 Q28 67 25 70" stroke="#aaa" stroke-width="1.5" fill="none"/></svg>
+        <svg class="bg-balloon" viewBox="0 0 50 70"><path d="M25 0 C38 0 50 12 50 28 C50 48 27 58 25 60 C23 58 0 48 0 28 C0 12 12 0 25 0 Z" fill="#8338EC"/><polygon points="23,59 27,59 25,64" fill="#8338EC"/><path d="M25 64 Q22 67 25 70" stroke="#aaa" stroke-width="1.5" fill="none"/></svg>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="header-section">
+            <h1>📸 Álbum de Recuerdos</h1>
+            <p>¡Gracias por acompañarnos en el 1er Añito de Manu! Haz clic en cualquier foto para verla en tamaño grande o toca en "Descargar" para guardarla.</p>
+        </div>
+
+        <!-- Malla de Fotos del Álbum -->
+        <div class="album-grid">
+
+            <!-- Foto 1 -->
+            <div class="photo-card">
+                <div class="photo-wrapper">
+                    <img src="Risas.jpg" alt="Manu sonriendo" class="zoomable">
+                </div>
+                <div class="card-actions">
+                    <a href="Risas.jpg" download="Manu-Risas.jpg" class="btn-download-card">
+                        <i class="fa-solid fa-download"></i> Descargar
+                    </a>
+                </div>
+            </div>
+
+            <!-- Foto 2 -->
+            <div class="photo-card">
+                <div class="photo-wrapper">
+                    <img src="con Delfi.jpg" alt="Manu y mamá con lentes" class="zoomable">
+                </div>
+                <div class="card-actions">
+                    <a href="con Delfi.jpg" download="Manu-con Delfi.jpg" class="btn-download-card">
+                        <i class="fa-solid fa-download"></i> Descargar
+                    </a>
+                </div>
+            </div>
+
+            <!-- Foto 3 -->
+            <div class="photo-card">
+                <div class="photo-wrapper">
+                    <img src="Lengua.jpg" alt="Manu en la cama sonriendo" class="zoomable">
+                </div>
+                <div class="card-actions">
+                    <a href="Lengua.jpg" download="Manu-Lengua.jpg" class="btn-download-card">
+                        <i class="fa-solid fa-download"></i> Descargar
+                    </a>
+                </div>
+            </div>
+
+            <!-- Foto 4 -->
+            <div class="photo-card">
+                <div class="photo-wrapper">
+                    <img src="Loquito.jpg" alt="Manu sacando la lengua" class="zoomable">
+                </div>
+                <div class="card-actions">
+                    <a href="Loquito.jpg" download="Manu-Loquito.jpg" class="btn-download-card">
+                        <i class="fa-solid fa-download"></i> Descargar
+                    </a>
+                </div>
+            </div>
+
+            <!-- Para agregar más fotos en el futuro, solo copia y pega uno de los bloques anteriores ajustando el nombre de archivo -->
+
+        </div>
+
+        <div class="footer">
+            ¡Un recuerdo inolvidable del 1er Añito de Manu! ❤️
+        </div>
+    </div>
+
+    <!-- Visor Lightbox -->
+    <div id="lightbox" class="lightbox-modal">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <button class="lightbox-nav lightbox-prev" onclick="changeImage(-1, event)"><i class="fa-solid fa-chevron-left"></i></button>
+        
+        <div class="lightbox-content-container">
+            <img class="lightbox-content" id="lightbox-img" alt="Foto ampliada">
+        </div>
+
+        <div class="lightbox-download-bar">
+            <a href="#" id="lightbox-download-btn" download class="btn-download-lightbox">
+                <i class="fa-solid fa-download"></i> Descargar Foto
+            </a>
+        </div>
+
+        <button class="lightbox-nav lightbox-next" onclick="changeImage(1, event)"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <!-- Animaciones GSAP y Lógica del Visor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // Animación inicial de entrada
+        gsap.from(".header-section", { duration: 1, y: 20, opacity: 0, ease: "power2.out" });
+        gsap.from(".photo-card", { duration: 0.8, y: 25, opacity: 0, stagger: 0.15, ease: "power2.out" });
+
+        // LÓGICA DEL VISOR (LIGHTBOX) Y DESCARGAS
+        let imageList = [];
+        let currentIndex = 0;
+
+        function rebuildImageList() {
+            const images = Array.from(document.querySelectorAll("img.zoomable"));
+            imageList = images.map(img => img.src);
+            return images;
+        }
+
+        document.addEventListener("click", (e) => {
+            if (e.target.tagName === 'IMG' && e.target.classList.contains('zoomable')) {
+                rebuildImageList();
+                const clickedSrc = e.target.src;
+                currentIndex = imageList.indexOf(clickedSrc);
+                
+                if (currentIndex !== -1) {
+                    openLightbox(currentIndex);
+                }
+            }
+        });
+
+        function openLightbox(index) {
+            currentIndex = index;
+            const modal = document.getElementById("lightbox");
+            const modalImg = document.getElementById("lightbox-img");
+            const downloadBtn = document.getElementById("lightbox-download-btn");
+            
+            const currentSrc = imageList[currentIndex];
+            modalImg.src = currentSrc;
+            downloadBtn.href = currentSrc;
+            
+            // Nombre por defecto al descargar
+            const filename = currentSrc.substring(currentSrc.lastIndexOf('/') + 1);
+            downloadBtn.setAttribute("download", filename);
+
+            modal.style.display = "flex";
+        }
+
+        function closeLightbox() {
+            document.getElementById("lightbox").style.display = "none";
+        }
+
+        function changeImage(direction, event) {
+            if (event) event.stopPropagation();
+            if (imageList.length === 0) rebuildImageList();
+            
+            currentIndex += direction;
+            if (currentIndex < 0) {
+                currentIndex = imageList.length - 1;
+            } else if (currentIndex >= imageList.length) {
+                currentIndex = 0;
+            }
+            
+            const currentSrc = imageList[currentIndex];
+            document.getElementById("lightbox-img").src = currentSrc;
+            
+            const downloadBtn = document.getElementById("lightbox-download-btn");
+            downloadBtn.href = currentSrc;
+            const filename = currentSrc.substring(currentSrc.lastIndexOf('/') + 1);
+            downloadBtn.setAttribute("download", filename);
+        }
+
+        // Cierre al hacer clic fuera de la foto
+        document.getElementById("lightbox").addEventListener("click", (e) => {
+            if (e.target.id === "lightbox" || e.target.classList.contains('lightbox-content-container')) {
+                closeLightbox();
+            }
+        });
+
+        // Navegación con teclado
+        document.addEventListener("keydown", (e) => {
+            const modal = document.getElementById("lightbox");
+            if (modal && modal.style.display === "flex") {
+                if (e.key === "ArrowLeft") changeImage(-1);
+                if (e.key === "ArrowRight") changeImage(1);
+                if (e.key === "Escape") closeLightbox();
+            }
+        });
+
+        // Gestos Táctiles (Swipe en celulares)
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        const lightboxModal = document.getElementById("lightbox");
+        lightboxModal.addEventListener("touchstart", (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        lightboxModal.addEventListener("touchend", (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const swipeThreshold = 40;
+            if (touchEndX < touchStartX - swipeThreshold) changeImage(1);
+            if (touchEndX > touchStartX + swipeThreshold) changeImage(-1);
+        }, { passive: true });
+    </script>
+</body>
+</html>
